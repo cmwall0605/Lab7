@@ -84,7 +84,26 @@
       // The main difference from fetchOne() will be the URL you request from; check
       // the writeup to view the URL pattern for fetch one and fetch all
       function fetchAll() {
-        // TODO
+
+        document.getElementById("recordForm").style.display = "none";
+        document.getElementById("recordIDcontainer").style.display = "none";
+
+        let endpoint = document.getElementById("endpoint").value;
+
+        fetch(endpoint).then(
+          function(response) {
+            if(response.ok) {
+                response.json().then(function(data) {
+                  document.getElementById("output").value = JSON.stringify(data);
+                });
+            } else {
+              document.getElementById("output").value = response.statusText;
+            }
+          }
+        ).catch(function(err) {
+          console.log("error!");
+          document.getElementById("output").value = err;
+        });
       }
 
       // This function should fetch one entry from the given endpoint.
@@ -92,23 +111,117 @@
       // The main difference from fetchAll() will be the URL you request from; check
       // the writeup to view the URL pattern for fetch one and fetch all
       function fetchOne() {
-        // TODO
+
+        document.getElementById("recordForm").style.display = "none";
+        document.getElementById("recordIDcontainer").style.display = "none";
+
+        let id = prompt("Enter record id");
+        let endpoint = document.getElementById("endpoint").value;
+
+        fetch(`${endpoint}/${id}`).then(
+          function(response) {
+            if(response.ok) {
+              response.json().then(function(data) {
+                document.getElementById("output").value = JSON.stringify(data);
+              });
+            } else {
+              document.getElementById("output").value = 
+                `Error ${response.status} : ${response.statusText}`;
+            }
+          }
+        ).catch(function(err) {
+          document.getElementById("output").value = err;
+        });
       }
 
       // This function should use fetch to create one entry in the given endpoint.
       // From the 4 CRUD actions, this is the CREATE action, and uses the POST http method.
       // The main difference from updateRecord() will be the URL you send data to; check
       // the writeup to view the URL pattern for create and update
-      function createRecord() {
-        // TODO
+      function createRecord(type) {
+
+        if(type == "show") {
+          
+          document.getElementById("recordForm").style.display = "block";
+          document.getElementById("recordIDcontainer").style.display = "none";
+
+        } else {
+
+          let endpoint = document.getElementById("endpoint").value;
+          let author = document.getElementById("author").value;
+          let title = document.getElementById("title").value;
+
+          let data = {
+            title: title,
+            author: author
+          }
+
+          fetch(endpoint, {
+            method: 'post',
+            headers: {
+              "Content-type": "application/json; charset=UTF-8"
+            },
+            body: JSON.stringify(data)
+          }).then(function(response) {
+            if(response.ok) {
+              response.json().then(function(data) {
+                document.getElementById("output").value = JSON.stringify(data);
+              });
+            } else {
+              document.getElementById("output").value = 
+                `Error ${response.status} : ${response.statusText}`;
+            }
+          }
+        ).catch(function(err) {
+            document.getElementById("output").value = err;
+          });
+        }
       }
 
       // This function should use fetch to update one existing entry in the given endpoint.
       // From the 4 CRUD actions, this is the UPDATE action, and uses the PUT http method.
       // The main difference from createRecord() will be the URL you send data to; check
       // the writeup to view the URL pattern for create and update
-      function updateRecord() {
-        // TODO
+      function updateRecord(type) {
+
+        if(type == "show") {
+          
+          document.getElementById("recordForm").style.display = "block";
+          document.getElementById("recordIDcontainer").style.display = "block";
+
+        } else {
+  
+          let endpoint = document.getElementById("endpoint").value;
+          let id = document.getElementById("recordID").value;
+          
+          let author = document.getElementById("author").value;
+          let title = document.getElementById("title").value;
+
+          let data = {
+            title: title,
+            author: author
+          }
+
+          fetch(`${endpoint}/${id}`, {
+            method: 'put',
+            headers: {
+              "Content-type": "application/json; charset=UTF-8"
+            },
+            body: JSON.stringify(data)
+          }).then(function(response) {
+            if(response.ok) {
+              response.json().then(function(data) {
+                document.getElementById("output").value = JSON.stringify(data);
+              });
+            } else {
+              document.getElementById("output").value = 
+                `Error ${response.status} : ${response.statusText}`;
+            }
+          }
+        ).catch(function(err) {
+            document.getElementById("output").value = err;
+          });
+        }
       }
 
       // This function should use fetch to delete one existing entry in the given endpoint.
@@ -117,7 +230,29 @@
       // request; check the writeup to view the URL pattern for get one and delete. THERE IS NO 
       // delete all, only delete one.
       function deleteRecord() {
-        // TODO
+
+        document.getElementById("recordForm").style.display = "none";
+        document.getElementById("recordIDcontainer").style.display = "none";
+
+        let id = prompt("Enter record id");
+        let endpoint = document.getElementById("endpoint").value;
+
+        fetch(`${endpoint}/${id}`, {
+          method: 'delete'
+        }).then(
+          function(response) {
+            if(response.ok) {
+              response.json().then(function(data) {
+                document.getElementById("output").value = JSON.stringify(data);
+              });
+            } else {
+              document.getElementById("output").value = 
+                `Error ${response.status} : ${response.statusText}`;
+            }
+          }
+        ).catch(function(err) {
+          document.getElementById("output").value = err;
+        });
       }
 
       window.addEventListener('DOMContentLoaded', () => {
